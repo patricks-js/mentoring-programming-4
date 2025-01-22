@@ -13,6 +13,12 @@ export async function productController(app) {
     return { products };
   });
 
+  app.get("/:productId", { onResponse: [logger] }, async (request, reply) => {
+    const productId = request.params.productId;
+    const product = await productService.findById(productId);
+    return { product };
+  });
+
   app.post("/", { onRequest: [logger] }, async (request, reply) => {
     const product = request.body;
     const createdProduct = await productService.create(product);

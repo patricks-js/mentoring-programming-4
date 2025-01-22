@@ -3,8 +3,33 @@ import { Product } from "../models/product.js";
 export class ProductService {
   #products = [];
 
+  // @Autowired // TODO add comment
+  // constructor(productRepository) {
+  //   this.#products = new productRepository();
+  // }
+
+  constructor() {
+    this.#products = [
+      new Product("1", "Biscoito", 10),
+      new Product("2", "Batata", 5),
+      new Product("3", "Frango", 7),
+    ];
+  }
+
   async findAll() {
     return this.#products;
+  }
+
+  // Input: 3
+  async findById(id) {
+    const index = this.#products.findIndex((p) => p.id === id);
+
+    if (index === -1) {
+      throw new Error("Product not found");
+    }
+
+    // Out: Biscoito
+    return this.#products[index];
   }
 
   async create(product) {
@@ -17,18 +42,18 @@ export class ProductService {
     return this.#products[this.#products.length - 1];
   }
 
-  async update(id, product) {
+  async update(id, newValues) {
+    const productToUpdate = await this.findById(id);
     const index = this.#products.findIndex((p) => p.id === id);
 
-    if (index === -1) {
+    if (!productToUpdate) {
       throw new Error("Product not found");
     }
 
-    this.#products[index] = new Product(
-      product.id,
-      product.name,
-      product.price,
-    );
+    this.#products[index] = {
+      ...productToUpdate,
+      ...newValues,
+    };
 
     return this.#products[index];
   }
