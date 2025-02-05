@@ -15,25 +15,34 @@ export async function productController(app) {
 
   app.get("/:productId", { onResponse: [logger] }, async (request, reply) => {
     const productId = request.params.productId;
-    const product = await productService.findById(productId);
-    return { product };
+
+    try {
+      const product = await productService.findById(productId);
+      return { product };
+    } catch (err) {
+      if (err.message === "Product not found") {
+        return reply.status(404).send();
+      }
+
+      console.log(err.message);
+    }
   });
 
   app.post("/", { onRequest: [logger] }, async (request, reply) => {
     const product = request.body;
     const createdProduct = await productService.create(product);
-    return { product: createdProduct };
+    return reply.status(201).send({ product: createdProduct });
   });
 
-  app.put("/:id", { onRequest: [logger] }, async (request, reply) => {
+  app.put("/:productId", { onRequest: [logger] }, async (request, reply) => {
     const product = request.body;
-    const id = request.params.id;
+    const id = request.params.productId;
     const updatedProduct = await productService.update(id, product);
     return { product: updatedProduct };
   });
 
-  app.delete("/:id", { onRequest: [logger] }, async (request, reply) => {
-    const id = request.params.id;
+  app.delete("/:productId", { onRequest: [logger] }, async (request, reply) => {
+    const id = request.params.productId;
     await productService.delete(id);
     return { message: "Product deleted successfully" };
   });

@@ -3,16 +3,13 @@ import { Product } from "../models/product.js";
 export class ProductService {
   #products = [];
 
-  // @Autowired // TODO add comment
-  // constructor(productRepository) {
-  //   this.#products = new productRepository();
-  // }
-
   constructor() {
     this.#products = [
-      new Product("1", "Biscoito", 10),
-      new Product("2", "Batata", 5),
+      new Product("1", "Biscoito", 4),
+      new Product("2", "Batata", 8),
       new Product("3", "Frango", 7),
+      new Product("4", "Abacaxi", 3),
+      new Product("5", "Whey Protein - Growth", 120),
     ];
   }
 
