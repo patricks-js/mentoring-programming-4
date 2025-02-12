@@ -1,6 +1,6 @@
 export const toUpperCase = (str) => str.toUpperCase();
 export const trim = (str) => str.trim();
-export const addPeriod = (str) => str + ".";
+export const addPeriod = (str) => `${str} .`;
 
 export const formatText = (str) => addPeriod(trim(toUpperCase(str))); // Returna do mais interno para o mais externo
 
@@ -20,5 +20,6 @@ console.log(formatText2("  heLLo world  ")); // out: "heLLo world."
 const compose =
   (...fns) =>
   (...args) =>
+    // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
     fns.reduceRight((res, fn) => [fn.call(...res)], args)[0];
 compose(toUpperCase, trim, addPeriod)("  hello world  ");
